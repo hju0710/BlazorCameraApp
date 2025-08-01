@@ -1,0 +1,104 @@
+﻿@* SingleCameraView.razor (最終版 v2 - 伺服器端健康檢查) *@
+
+@inject HttpClient Http
+@implements IDisposable
+
+<div class="camera-container" style="aspect-ratio: 16/9; position: relative; background-color: #000;">
+    @if (_isServerOnline)
+    {
+        <iframe src="@_streamUrl"
+                frameborder="0"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowfullscreen
+                style="width: 100%; height: 100%; border: none;">
+        </iframe>
+    }
+    else
+    {
+        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-color: #333; color: white; font-family: sans-serif;">
+            <span>連線中斷... 正在自動重連</span>
+        </div>
+    }
+
+    <button @onclick="RefreshStream" class="btn btn-sm btn-light"
+            style="position: absolute; top: 5px; right: 5px; opacity: 0.7; z-index: 10;">
+        <span class="oi oi-reload"></span>
+    </button>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public CameraInfo Camera { get; set; } = null!;
+
+    [Parameter, EditorRequired]
+    public string ProxyAddress { get; set; } = "localhost:8080";
+
+    private string _streamUrl = string.Empty;
+    private string _originalUrl = string.Empty;
+    private bool _isServerOnline = true;
+    private readonly CancellationTokenSource _cts = new();
+
+    protected override void OnInitialized()
+    {
+        if (Camera != null)
+        {
+            _originalUrl = $"http://{ProxyAddress}/webrtc.html?src={Camera.StreamName}&media=video";
+            _streamUrl = _originalUrl;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _ = MonitorServerStatusAsync();
+        }
+    }
+
+    private async Task MonitorServerStatusAsync()
+    {
+        while (!_cts.IsCancellationRequested)
+        {
+            bool isCurrentlyOnline;
+            try
+            {
+                var response = await Http.GetAsync("/health", _cts.Token);
+                isCurrentlyOnline = response.IsSuccessStatusCode;
+            }
+            catch (Exception)
+            {
+                isCurrentlyOnline = false;
+            }
+
+            if (_isServerOnline != isCurrentlyOnline)
+            {
+                _isServerOnline = isCurrentlyOnline;
+                if (isCurrentlyOnline)
+                {
+                    RefreshStream();
+                }
+                await InvokeAsync(StateHasChanged);
+            }
+
+            try
+            {
+                await Task.Delay(5000, _cts.Token);
+            }
+            catch (TaskCanceledException)
+            {
+                break;
+            }
+        }
+    }
+
+    private void RefreshStream()
+    {
+        _streamUrl = $"{_originalUrl}&t={DateTime.Now.Ticks}";
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
+    }
+}

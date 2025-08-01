@@ -1,0 +1,33 @@
+﻿@page "/"
+@inject CameraService CamService
+
+<h3>多攝影機監控網格 (Multi-Camera Grid)</h3>
+
+@if (cameras.Any())
+{
+    <div class="camera-grid-layout">
+        @foreach (var camera in cameras)
+        {
+            <SingleCameraView Camera="camera" ProxyAddress="@proxyAddress" />
+        }
+    </div>
+}
+else
+{
+    <p>正在載入攝影機清單...</p>
+}
+
+@code {
+    private IReadOnlyList<CameraInfo> cameras = new List<CameraInfo>();
+
+    // ↓↓↓↓↓↓ 這一行是關鍵，它定義了我們的 .NET 代理伺服器的位址 ↓↓↓↓↓↓
+    // 如果您之前為了解決 8080 連接埠衝突而修改了 appsettings.json，
+    // 請務必確保這裡的埠號與之一致 (例如 "localhost:8088")。
+    private string proxyAddress = "localhost:8080";
+
+    protected override void OnInitialized()
+    {
+        // 從服務中取得攝影機的設定清單
+        cameras = CamService.GetCameras();
+    }
+}

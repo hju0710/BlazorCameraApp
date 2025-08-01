@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36121.58
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorCameraApp.Proxy", "BlazorCameraApp.Proxy\BlazorCameraApp.Proxy.csproj", "{7AD17DBE-BDBA-48DD-8F87-F1311E1A0AFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorCameraApp", "BlazorCameraApp\BlazorCameraApp.csproj", "{C2FE55F8-4C20-8FD3-EDEE-3A10AEF1E2F0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7AD17DBE-BDBA-48DD-8F87-F1311E1A0AFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AD17DBE-BDBA-48DD-8F87-F1311E1A0AFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AD17DBE-BDBA-48DD-8F87-F1311E1A0AFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AD17DBE-BDBA-48DD-8F87-F1311E1A0AFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2FE55F8-4C20-8FD3-EDEE-3A10AEF1E2F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2FE55F8-4C20-8FD3-EDEE-3A10AEF1E2F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2FE55F8-4C20-8FD3-EDEE-3A10AEF1E2F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2FE55F8-4C20-8FD3-EDEE-3A10AEF1E2F0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2C11367B-6024-4AAE-90DD-DEB04D23B3CD}
+	EndGlobalSection
+EndGlobal

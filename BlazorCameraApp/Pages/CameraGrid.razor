@@ -1,0 +1,34 @@
+﻿@* // Pages/CameraGrid.razor *@
+
+@page "/grid"
+@inject Services.CameraService CamService
+
+<h3>多攝影機監控網格 (Multi-Camera Grid)</h3>
+
+@if (cameras.Any())
+{
+    <div class="camera-grid-layout">
+        @foreach (var camera in cameras)
+        {
+            <SingleCameraView Camera="camera" Go2rtcServerIp="@go2rtcIp" />
+        }
+    </div>
+}
+else
+{
+    <p>沒有設定攝影機。</p>
+}
+
+
+@code {
+    private IReadOnlyList<Models.CameraInfo> cameras = new List<Models.CameraInfo>();
+
+    // 【重要】這裡的 IP 必須是 go2rtc 伺服器的 IP 位址
+    private string go2rtcIp = "localhost";
+    //  private string go2rtcIp = "192.168.110.127";
+    protected override void OnInitialized()
+    {
+        cameras = CamService.GetCameras();
+        var f = cameras;
+    }
+}
